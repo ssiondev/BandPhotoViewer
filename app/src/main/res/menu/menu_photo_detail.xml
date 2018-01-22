@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_photo_slide"
+        android:orderInCategory="1"
+        android:icon="@drawable/ic_action_slideshow"
+        android:title="슬라이드 실행"
+        app:showAsAction="always" />
+</menu>
