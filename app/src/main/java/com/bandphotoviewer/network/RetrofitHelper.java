@@ -1,12 +1,13 @@
-package com.bandphotoviewer.NetworkManager;
+package com.bandphotoviewer.network;
 
-import com.bandphotoviewer.Model.AlbumList;
-import com.bandphotoviewer.Model.BandList;
-import com.bandphotoviewer.Model.PhotoList;
-import com.bandphotoviewer.Model.BandResponse;
-import com.bandphotoviewer.Model.PageableResponse;
-import com.bandphotoviewer.Model.AuthorizationInfo;
-import com.bandphotoviewer.Utils.Pref;
+import com.bandphotoviewer.model.Album;
+import com.bandphotoviewer.model.BandList;
+import com.bandphotoviewer.model.Pageable;
+import com.bandphotoviewer.model.Photo;
+import com.bandphotoviewer.model.BandResponse;
+import com.bandphotoviewer.model.PageableResponse;
+import com.bandphotoviewer.model.AuthorizationInfo;
+import com.bandphotoviewer.utils.Pref;
 
 import java.util.List;
 import java.util.Map;
@@ -21,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by user on 2018. 1. 10..
  */
 
-public class RequestRetrofitFactory {
+public class RetrofitHelper {
 
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
@@ -47,14 +48,14 @@ public class RequestRetrofitFactory {
                         .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<PageableResponse<List<AlbumList>>> getAlbumList(String bandKey, Map<String, String> nextParam) {
+    public Single<PageableResponse<Pageable<List<Album>>>> getAlbumListTest(String bandKey, Map<String, String> nextParam) {
         return bandService.getBandAlbums(getAccessTokenFromPref(), bandKey, nextParam)
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread());
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Single<PageableResponse<List<PhotoList>>> getPhotoList(String bandKey, String albumKey, Map<String, String> nextParam) {
+    public Single<PageableResponse<Pageable<List<Photo>>>> getPhotoList(String bandKey, String albumKey, Map<String, String> nextParam) {
         return bandService.getBandPhotos(getAccessTokenFromPref(), bandKey, albumKey, nextParam)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());

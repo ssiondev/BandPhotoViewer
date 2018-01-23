@@ -1,9 +1,9 @@
-package com.bandphotoviewer.NetworkManager;
+package com.bandphotoviewer.network;
 
 import android.util.Base64;
 
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import com.bandphotoviewer.Utils.Constant;
+import com.bandphotoviewer.utils.Constant;
 
 import java.util.concurrent.TimeUnit;
 

@@ -1,4 +1,4 @@
-package com.bandphotoviewer.Model;
+package com.bandphotoviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,10 +12,7 @@ public class PageableResponse<T> {
     int reslutCode;
 
     @SerializedName("result_data")
-    Paging resultData;
-
-    @SerializedName("items")
-    T items;
+    T resultData;
 
     public int getReslutCode() {
         return reslutCode;
@@ -25,19 +22,11 @@ public class PageableResponse<T> {
         this.reslutCode = reslutCode;
     }
 
-    public Paging getResultData() {
+    public T getResultData() {
         return resultData;
     }
 
-    public void setResultData(Paging resultData) {
+    public void setResultData(T resultData) {
         this.resultData = resultData;
-    }
-
-    public T getItems() {
-        return items;
-    }
-
-    public void setItems(T items) {
-        this.items = items;
     }
 }

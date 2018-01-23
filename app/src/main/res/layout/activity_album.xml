@@ -12,34 +12,19 @@
             type="com.bandphotoviewer.ViewModel.AlbumListViewModel" />
     </data>
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="5dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/album_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            app:layoutManager="LinearLayoutManager"/>
 
-            <TextView
-                android:id="@+id/band_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="16dp"
-                android:textColor="#757575"
-                android:textSize="25sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="5dp">
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/album_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="GridLayoutManager" />
-
-            </LinearLayout>
-        </LinearLayout>
+    </LinearLayout>
 
 </layout>
 

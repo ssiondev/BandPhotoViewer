@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.bandphotoviewer.Model.AuthorizationInfo;
-import com.bandphotoviewer.Utils.Pref;
+import com.bandphotoviewer.model.AuthorizationInfo;
+import com.bandphotoviewer.utils.Pref;
 
 /**
  * token check 후 인텐트 넘기는 역할만 수행하는 액티비티

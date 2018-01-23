@@ -1,4 +1,4 @@
-package com.bandphotoviewer.Utils;
+package com.bandphotoviewer.utils;
 
 /**
  * Created by user on 2017. 12. 20..

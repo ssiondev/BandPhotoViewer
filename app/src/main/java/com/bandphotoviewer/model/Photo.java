@@ -1,7 +1,4 @@
-package com.bandphotoviewer.Model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.bandphotoviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -9,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by user on 2017. 12. 20..
  */
 
-public class PhotoList {
+public class Photo {
 
     @SerializedName("photo_key")
     private String photoKey;   //사진 식별자

@@ -7,13 +7,13 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.bandphotoviewer.BR;
-import com.bandphotoviewer.Model.AlbumList;
-import com.bandphotoviewer.Model.BandModel;
-import com.bandphotoviewer.Model.PhotoList;
-import com.bandphotoviewer.Utils.Pref;
+import com.bandphotoviewer.model.Album;
+import com.bandphotoviewer.model.Band;
+import com.bandphotoviewer.model.Page;
+import com.bandphotoviewer.model.Photo;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
-import com.bandphotoviewer.ViewModel.BindListViewType;
-import com.bandphotoviewer.ViewModel.RecyclerItemClickListener;
+import com.bandphotoviewer.customview.BindListViewType;
+import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ItemAlbumcardviewBinding;
 import com.bandphotoviewer.databinding.ItemGridPhotoBinding;
 import com.bandphotoviewer.databinding.ItemMaincardviewBinding;
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapter.BindingViewHolder> {
-
     private Context context;
     private RecyclerItemClickListener recyclerItemClickListener;
 
@@ -38,15 +37,23 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         this.itemList.addAll(viewModelList);
     }
 
+    public void addItemList(List<AbstractViewModel> viewModelList) {
+        this.itemList.addAll(viewModelList);
+    }
+
+    public void clearItemList() {
+        this.itemList.clear();
+    }
+
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (BindListViewType.values()[viewType]) {
             case BANDLIST:
-                return new BindingViewHolder<ItemMaincardviewBinding, BandModel>(ItemMaincardviewBinding.inflate(LayoutInflater.from(context)));
+                return new BindingViewHolder<ItemMaincardviewBinding, Band>(ItemMaincardviewBinding.inflate(LayoutInflater.from(context)));
             case ALBUMLIST:
-                return new BindingViewHolder<ItemAlbumcardviewBinding, AlbumList>(ItemAlbumcardviewBinding.inflate(LayoutInflater.from(context)));
+                return new BindingViewHolder<ItemAlbumcardviewBinding, Album>(ItemAlbumcardviewBinding.inflate(LayoutInflater.from(context)));
             case PHOTOLIST:
-                return new BindingViewHolder<ItemGridPhotoBinding, PhotoList>(ItemGridPhotoBinding.inflate(LayoutInflater.from(context)));
+                return new BindingViewHolder<ItemGridPhotoBinding, Photo>(ItemGridPhotoBinding.inflate(LayoutInflater.from(context)));
             default:
                 return null;
         }
@@ -85,6 +92,12 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         public void bind(VM viewmodel) {
             binding.setVariable(BR.viewModel, viewmodel);
             binding.executePendingBindings();
+        }
+
+        public interface NextPageLoagdingListener {
+            void onLoadingFinish(Page page);
+
+            void onLoadingFail();
         }
 
     }

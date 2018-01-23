@@ -3,8 +3,9 @@ package com.bandphotoviewer.ViewModel;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
+import com.bandphotoviewer.customview.BindListViewType;
 import com.bumptech.glide.Glide;
-import com.bandphotoviewer.Model.PhotoList;
+import com.bandphotoviewer.model.Photo;
 
 /**
  * Created by user on 2018. 1. 16..
@@ -12,11 +13,11 @@ import com.bandphotoviewer.Model.PhotoList;
 
 public class PhotoDetailViewModel extends AbstractViewModel {
 
-    private PhotoList photoList;
+    private Photo photo;
 
-    public PhotoDetailViewModel(PhotoList photoList) {
-        super(photoList);
-        this.photoList = photoList;
+    public PhotoDetailViewModel(Photo photo) {
+        super(photo);
+        this.photo = photo;
     }
 
     @Override
@@ -24,16 +25,16 @@ public class PhotoDetailViewModel extends AbstractViewModel {
         return null;
     }
 
-    public String getUrl() {return photoList.getUrl();}
+    public String getUrl() {return photo.getUrl();}
 
-    public String getPhotoKey() {return photoList.getPhotoKey();}
+    public String getPhotoKey() {return photo.getPhotoKey();}
 
     public int getHeight(){
-        return photoList.getHeight();
+        return photo.getHeight();
     }
 
     public int getWidth(){
-        return photoList.getWidth();
+        return photo.getWidth();
     }
 
     @BindingAdapter("bind:imageUrl")

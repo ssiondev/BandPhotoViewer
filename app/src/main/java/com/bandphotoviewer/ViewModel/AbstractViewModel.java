@@ -1,5 +1,8 @@
 package com.bandphotoviewer.ViewModel;
 
+import com.bandphotoviewer.customview.BindListViewType;
+import com.bandphotoviewer.customview.RecyclerItemClickListener;
+
 /**
  * Created by user on 2018. 1. 15..
  */

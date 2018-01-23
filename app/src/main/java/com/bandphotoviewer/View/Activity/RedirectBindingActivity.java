@@ -5,9 +5,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import com.bandphotoviewer.Model.AuthorizationInfo;
-import com.bandphotoviewer.NetworkManager.RequestRetrofitFactory;
-import com.bandphotoviewer.Utils.Pref;
+import com.bandphotoviewer.model.AuthorizationInfo;
+import com.bandphotoviewer.network.RetrofitHelper;
+import com.bandphotoviewer.utils.Pref;
 
 import io.reactivex.disposables.Disposable;
 /**
@@ -18,7 +18,7 @@ import io.reactivex.disposables.Disposable;
 public class RedirectBindingActivity extends BaseBindingActivity {
     private final String TAG = RedirectBindingActivity.class.getSimpleName();
 
-    private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
+    private RetrofitHelper retrofitHelper = new RetrofitHelper();
     private Pref pref = Pref.getInstance();
 
     private Disposable disposable;
@@ -44,7 +44,7 @@ public class RedirectBindingActivity extends BaseBindingActivity {
     private void callRetrofitForLogin(Uri uri){
         String auth_token = uri.getQueryParameter("code");
         if (auth_token != null) {
-            disposable = requestRetrofitFactory.requestForAuthToken(auth_token)
+            disposable = retrofitHelper.requestForAuthToken(auth_token)
                     .subscribe(authorizationInfo ->
                             completeLogin(authorizationInfo)
                             ,throwable -> throwable.printStackTrace());
@@ -55,7 +55,7 @@ public class RedirectBindingActivity extends BaseBindingActivity {
     }
 
     private void completeLogin(AuthorizationInfo authorizationInfo){
-        requestRetrofitFactory.saveJsonToPref(authorizationInfo);
+        retrofitHelper.saveJsonToPref(authorizationInfo);
         startActivity(new Intent(RedirectBindingActivity.this, MainActivity.class));
         finish();
     }

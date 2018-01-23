@@ -4,26 +4,29 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.bandphotoviewer.Model.Page;
-import com.bandphotoviewer.Model.PageableResponse;
+import com.bandphotoviewer.ViewModel.AlbumListViewModel;
+import com.bandphotoviewer.ViewModel.PhotoListViewModel;
+import com.bandphotoviewer.customview.RecyclerViewScrollListener;
+import com.bandphotoviewer.model.Album;
+import com.bandphotoviewer.model.Page;
+import com.bandphotoviewer.model.Pageable;
+import com.bandphotoviewer.model.PageableResponse;
 import com.bandphotoviewer.View.Adapter.ItemDecoratorViews;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.bandphotoviewer.Model.PhotoList;
-import com.bandphotoviewer.NetworkManager.RequestRetrofitFactory;
+import com.bandphotoviewer.model.Photo;
+import com.bandphotoviewer.network.RetrofitHelper;
 import com.bandphotoviewer.R;
-import com.bandphotoviewer.Utils.Pref;
+import com.bandphotoviewer.utils.Pref;
 import com.bandphotoviewer.View.Adapter.RecyclerItemAdapter;
-import com.bandphotoviewer.ViewModel.RecyclerItemClickListener;
+import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ActivityPhotoBinding;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +36,7 @@ import io.reactivex.disposables.Disposable;
 public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPhotoBinding> {
     private static final String TAG = PhotoBindingActivity.class.getSimpleName();
 
-    private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
+    private RetrofitHelper retrofitHelper = new RetrofitHelper();
     private Pref pref = Pref.getInstance();
 
     private RecyclerView recyclerView;
@@ -44,12 +47,9 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
     private String albumKey;
     private String albumName;
 
-    private Page paging;
+    private GridLayoutManager gridLayoutManager;
     private Disposable disposable;
-
-    private int spanCount = 3;
-    private int spacing = 2;
-    private boolean includeEdge = false;
+    private Page page;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
         pref.setContext(this);
         getIntentForCallRetrofit(getIntent());
 
-        disposable = requestRetrofitFactory.getPhotoList(bandKey, albumKey, new HashMap<>())
+        disposable = retrofitHelper.getPhotoList(bandKey, albumKey, new HashMap<>())
                 .subscribe(listPageableResponse -> {
                     updateList(listPageableResponse);
                 }, throwable -> throwable.printStackTrace());
@@ -75,36 +75,73 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
     }
 
 
-    private void updateList(PageableResponse<List<PhotoList>> pageableResponse) {
-        if (pageableResponse != null) {
-            paging = pageableResponse.getResultData().getPage();
+    private void getPhotoList(){
+        if(page != null && page.getNextParams() == null) {
+            return;
+        }
+
+        retrofitHelper.getCompositeDisposable()
+                .add(retrofitHelper.getPhotoList(bandKey, albumKey, page == null ? new HashMap<>() : page.getNextParams())
+                        .subscribe(pagingBandResponse -> {
+                            updateList(pagingBandResponse);
+                        }, throwable -> throwable.printStackTrace()));
+    }
+
+    private void updateList(PageableResponse<Pageable<List<Photo>>> bandResponse) {
+        if (bandResponse == null
+                || bandResponse.getResultData() == null
+                || bandResponse.getResultData().getItems() == null) {
+            return;
         }
 
         List<AbstractViewModel> viewModelList = new ArrayList<>();
+        for (Photo photo : bandResponse.getResultData().getItems()) {
+            viewModelList.add(new PhotoListViewModel(photo, photoListClickListener));
+        }
 
-        Log.e("nextParam", paging.getNextParams() != null ? paging.getNextParams().toString() : "");
+        if(page == null) {
+            recyclerItemAdapter.clearItemList();
+        }
 
-        recyclerItemAdapter.setItemList(viewModelList);
+        recyclerItemAdapter.addItemList(viewModelList);
         recyclerItemAdapter.notifyDataSetChanged();
+
+        page = bandResponse.getResultData().getPage();
     }
 
     public void initView() {
         setToolbarTitle("Photo");
         recyclerView = getContentBinding().photoRecyclerview;
 
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
+        gridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.addItemDecoration(new ItemDecoratorViews(spanCount, spacing, includeEdge));
+        recyclerView.addOnScrollListener(getViewScrollListener(gridLayoutManager));
+
+        recyclerView.addItemDecoration(new ItemDecoratorViews(3, 2, false));
 
         recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), photoListClickListener);
         recyclerView.setAdapter(recyclerItemAdapter);
     }
 
+    RecyclerViewScrollListener getViewScrollListener(GridLayoutManager gridLayoutManager) {
+        return new RecyclerViewScrollListener(gridLayoutManager, 5) {
+
+            @Override
+            public int getLastVisibleItem(int[] lastVisibleItemPositions) {
+                return super.getLastVisibleItem(lastVisibleItemPositions);
+            }
+
+            @Override
+            public void onLoadMore(int totalItemsCount, RecyclerView view) {
+                getPhotoList();
+            }
+        };
+    }
+
     RecyclerItemClickListener photoListClickListener = new RecyclerItemClickListener() {
         @Override
         public void onItemClick(Object o) {
-            if (o instanceof PhotoList) {
+            if (o instanceof Photo) {
                 Intent intent = new Intent(PhotoBindingActivity.this, PhotoDetailBindingActivity.class);
                 intent.putExtra("album_key", albumKey);
                 intent.putExtra("slide_show", false);
@@ -132,15 +169,6 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    public List<PhotoList> convertToPhotoList() {
-        String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
-        Type listType = new TypeToken<ArrayList<PhotoList>>() {
-        }.getType();
-        Gson gson = new Gson();
-        ArrayList<PhotoList> list = gson.fromJson(json, listType);
-        return list;
     }
 
     @Override

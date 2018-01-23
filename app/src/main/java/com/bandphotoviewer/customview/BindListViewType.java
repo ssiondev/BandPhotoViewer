@@ -1,4 +1,4 @@
-package com.bandphotoviewer.ViewModel;
+package com.bandphotoviewer.customview;
 
 /**
  * Created by user on 2018. 1. 15..

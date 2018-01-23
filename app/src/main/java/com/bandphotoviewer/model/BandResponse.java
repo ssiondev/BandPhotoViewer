@@ -1,9 +1,9 @@
-package com.bandphotoviewer.Model;
+package com.bandphotoviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by user on 2018. 1. 22..
+ * result data 내부에 떨어지는 list
  */
 
 public class BandResponse<T> {

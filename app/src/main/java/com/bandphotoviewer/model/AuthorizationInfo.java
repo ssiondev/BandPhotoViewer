@@ -1,7 +1,4 @@
-package com.bandphotoviewer.Model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.bandphotoviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 

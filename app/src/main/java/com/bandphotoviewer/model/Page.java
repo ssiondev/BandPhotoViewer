@@ -1,12 +1,11 @@
-package com.bandphotoviewer.Model;
+package com.bandphotoviewer.model;
 
-import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.Map;
 
 /**
- * Created by user on 2018. 1. 18..
+ *
  */
 
 public class Page {
@@ -24,4 +23,6 @@ public class Page {
     public Map<String, String> getNextParams() {
         return nextParams;
     }
+
+
 }

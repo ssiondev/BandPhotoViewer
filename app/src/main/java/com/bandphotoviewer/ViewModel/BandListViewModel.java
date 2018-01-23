@@ -3,22 +3,24 @@ package com.bandphotoviewer.ViewModel;
 import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
+import com.bandphotoviewer.customview.BindListViewType;
+import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bumptech.glide.Glide;
-import com.bandphotoviewer.Model.BandModel;
+import com.bandphotoviewer.model.Band;
 
 /**
  * 여기서는 모델데이터 가지고 룰루랄라해야함
  */
 
-public class BandListViewModel extends AbstractViewModel<BandModel> {
+public class BandListViewModel extends AbstractViewModel<Band> {
 
     @Override
     public BindListViewType getViewType() {
         return BindListViewType.BANDLIST;
     }
 
-    public BandListViewModel(BandModel bandModel, RecyclerItemClickListener recyclerItemClickListener) {
-        super(bandModel, recyclerItemClickListener);
+    public BandListViewModel(Band band, RecyclerItemClickListener recyclerItemClickListener) {
+        super(band, recyclerItemClickListener);
     }
 
     public void onItemClick() {

@@ -1,8 +1,5 @@
-package com.bandphotoviewer.Model;
+package com.bandphotoviewer.model;
 
-
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +7,7 @@ import com.google.gson.annotations.SerializedName;
  * Created by user on 2017. 12. 20..
  */
 
-public class AlbumList {
+public class Album {
 
     @SerializedName("photo_album_key")
     private String photoAlbumKey; //앨범 식별자

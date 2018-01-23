@@ -1,13 +1,10 @@
-package com.bandphotoviewer.Model;
-
-import android.os.Parcel;
-import android.os.Parcelable;
+package com.bandphotoviewer.model;
 
 /**
  * Created by user on 2018. 1. 11..
  */
 
-public class BandModel {
+public class Band {
 
     private String name;   //밴드 이름
 

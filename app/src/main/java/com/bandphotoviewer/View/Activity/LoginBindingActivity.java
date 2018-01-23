@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.bandphotoviewer.R;
-import com.bandphotoviewer.Utils.Constant;
+import com.bandphotoviewer.utils.Constant;
 import com.bandphotoviewer.databinding.ActivityLoginBinding;
 
 import java.net.URLEncoder;

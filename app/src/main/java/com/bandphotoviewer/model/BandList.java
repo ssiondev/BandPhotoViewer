@@ -1,4 +1,4 @@
-package com.bandphotoviewer.Model;
+package com.bandphotoviewer.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 public class BandList {
 
-    List<BandModel> bands;
+    List<Band> bands;
 
     @SerializedName("name")
     String name;
@@ -24,7 +24,7 @@ public class BandList {
     @SerializedName("member_count")
     int memberCount;
 
-    public List<BandModel> getBands() {
+    public List<Band> getBands() {
         return bands;
     }
 
