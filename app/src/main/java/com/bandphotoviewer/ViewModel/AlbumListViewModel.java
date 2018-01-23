@@ -3,7 +3,7 @@ package com.bandphotoviewer.ViewModel;
 import android.databinding.BindingAdapter;
 import android.widget.TextView;
 
-import com.bandphotoviewer.Model.BandAlbumModel;
+import com.bandphotoviewer.Model.AlbumList;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,36 +14,36 @@ import java.util.Date;
 
 public class AlbumListViewModel extends AbstractViewModel {
 
-    private BandAlbumModel bandAlbumModel;
+    private AlbumList albumList;
 
     @Override
     public BindListViewType getViewType() {
         return BindListViewType.ALBUMLIST;
     }
 
-    public AlbumListViewModel(BandAlbumModel bandAlbumModel, RecyclerItemClickListener recyclerItemClickListener) {
-        super(recyclerItemClickListener);
-        this.bandAlbumModel = bandAlbumModel;
+    public AlbumListViewModel(AlbumList albumList, RecyclerItemClickListener recyclerItemClickListener) {
+        super(albumList, recyclerItemClickListener);
+        this.albumList = albumList;
     }
 
     public void onItemClick() {
-        recyclerItemClickListener.onItemClick(bandAlbumModel);
+        recyclerItemClickListener.onItemClick(albumList);
     }
 
     public String getAlbumKey() {
-        return bandAlbumModel.getPhoto_album_key();
+        return albumList.getPhoto_album_key();
     }
 
     public String getAlbumName() {
-        return bandAlbumModel.getName();
+        return albumList.getName();
     }
 
     public long getCreatedat() {
-        return bandAlbumModel.getCreated_at();
+        return albumList.getCreated_at();
     }
 
     public int getPhotoCount() {
-        return bandAlbumModel.getPhoto_count();
+        return albumList.getPhoto_count();
     }
 
     @BindingAdapter("bind:photoCount")

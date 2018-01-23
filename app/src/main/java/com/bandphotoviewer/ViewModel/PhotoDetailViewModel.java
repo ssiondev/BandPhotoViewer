@@ -4,7 +4,7 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bandphotoviewer.Model.BandPhotoModel;
+import com.bandphotoviewer.Model.PhotoList;
 
 /**
  * Created by user on 2018. 1. 16..
@@ -12,11 +12,11 @@ import com.bandphotoviewer.Model.BandPhotoModel;
 
 public class PhotoDetailViewModel extends AbstractViewModel {
 
-    private BandPhotoModel bandPhotoModel;
+    private PhotoList photoList;
 
-    public PhotoDetailViewModel(BandPhotoModel bandPhotoModel) {
-        super();
-        this.bandPhotoModel = bandPhotoModel;
+    public PhotoDetailViewModel(PhotoList photoList) {
+        super(photoList);
+        this.photoList = photoList;
     }
 
     @Override
@@ -24,16 +24,16 @@ public class PhotoDetailViewModel extends AbstractViewModel {
         return null;
     }
 
-    public String getUrl() {return bandPhotoModel.getUrl();}
+    public String getUrl() {return photoList.getUrl();}
 
-    public String getPhotoKey() {return bandPhotoModel.getPhoto_key();}
+    public String getPhotoKey() {return photoList.getPhotoKey();}
 
     public int getHeight(){
-        return bandPhotoModel.getHeight();
+        return photoList.getHeight();
     }
 
     public int getWidth(){
-        return bandPhotoModel.getWidth();
+        return photoList.getWidth();
     }
 
     @BindingAdapter("bind:imageUrl")

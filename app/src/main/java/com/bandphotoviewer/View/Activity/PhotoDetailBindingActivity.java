@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.bandphotoviewer.Model.BandPhotoModel;
+import com.bandphotoviewer.Model.PhotoList;
 import com.bandphotoviewer.R;
 import com.bandphotoviewer.Utils.Pref;
 import com.bandphotoviewer.ViewModel.PhotoDetailViewModel;
@@ -36,7 +36,7 @@ import java.util.TimerTask;
 public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<ActivityPhotoDetailBinding> {
     private static final String TAG = PhotoDetailBindingActivity.class.getSimpleName();
 
-    private List<BandPhotoModel> bandPhotoModelList = new ArrayList<>();
+    private List<PhotoList> photoListList = new ArrayList<>();
     private PhotoPagerAdapter photoViewPagerAdapter;
     private Pref pref = Pref.getInstance();
 
@@ -69,7 +69,7 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
 
     public void initView() {
         viewPager = getContentBinding().detailViewPager;
-        bandPhotoModelList = convertToPhotoList();
+        photoListList = convertToPhotoList();
 
         photoViewPagerAdapter = new PhotoPagerAdapter();
         viewPager.setAdapter(photoViewPagerAdapter);
@@ -79,12 +79,12 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
         }
     }
 
-    public List<BandPhotoModel> convertToPhotoList() {
+    public List<PhotoList> convertToPhotoList() {
         String json = pref.getString(Pref.BAND_PHOTO_KEY + albumKey, null);
-        Type listType = new TypeToken<ArrayList<BandPhotoModel>>() {
+        Type listType = new TypeToken<ArrayList<PhotoList>>() {
         }.getType();
         Gson gson = new Gson();
-        ArrayList<BandPhotoModel> list = gson.fromJson(json, listType);
+        ArrayList<PhotoList> list = gson.fromJson(json, listType);
         return list;
     }
 
@@ -92,7 +92,7 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
 
         @Override
         public int getCount() {
-            return bandPhotoModelList.size();
+            return photoListList.size();
         }
 
         @Override
@@ -107,7 +107,7 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
                     .inflate(LayoutInflater.from(container.getContext()),
                             R.layout.item_photodetail, container, false);
 
-            itemPhotodetailBinding.setViewModel(new PhotoDetailViewModel(bandPhotoModelList.get(position)));
+            itemPhotodetailBinding.setViewModel(new PhotoDetailViewModel(photoListList.get(position)));
             container.addView(itemPhotodetailBinding.getRoot(), RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
             return itemPhotodetailBinding.getRoot();
@@ -124,7 +124,7 @@ public class PhotoDetailBindingActivity extends BaseToolbarBindingActivity<Activ
                 @Override
                 public void run() {
                     viewPager.setCurrentItem(currentPage, true);
-                    if (currentPage == bandPhotoModelList.size()) {
+                    if (currentPage == photoListList.size()) {
                         finish();
                     } else {
                         ++currentPage;

@@ -9,9 +9,7 @@ import com.bandphotoviewer.Model.AuthorizationInfo;
 import com.bandphotoviewer.NetworkManager.RequestRetrofitFactory;
 import com.bandphotoviewer.Utils.Pref;
 
-import io.reactivex.functions.Consumer;
-
-
+import io.reactivex.disposables.Disposable;
 /**
  * Created by ssion.dev on 2017. 12. 28..
  *
@@ -23,10 +21,13 @@ public class RedirectBindingActivity extends BaseBindingActivity {
     private RequestRetrofitFactory requestRetrofitFactory = new RequestRetrofitFactory();
     private Pref pref = Pref.getInstance();
 
+    private Disposable disposable;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getRedirectUrlIntent(getIntent());
+
         pref.setContext(this);
     }
 
@@ -43,23 +44,21 @@ public class RedirectBindingActivity extends BaseBindingActivity {
     private void callRetrofitForLogin(Uri uri){
         String auth_token = uri.getQueryParameter("code");
         if (auth_token != null) {
-            requestRetrofitFactory.getCompositeDisposable().add(
-                    requestRetrofitFactory.requestForAuthToken(auth_token)
-                    .subscribe(consumer));
+            disposable = requestRetrofitFactory.requestForAuthToken(auth_token)
+                    .subscribe(authorizationInfo ->
+                            completeLogin(authorizationInfo)
+                            ,throwable -> throwable.printStackTrace());
         } else {
             startActivity(new Intent(RedirectBindingActivity.this, LoginBindingActivity.class));
             finish();
         }
     }
 
-    Consumer<AuthorizationInfo> consumer = new Consumer<AuthorizationInfo>() {
-        @Override
-        public void accept(AuthorizationInfo authorizationInfo) {
-            requestRetrofitFactory.saveJsonToPref(authorizationInfo);
-            startActivity(new Intent(RedirectBindingActivity.this, MainActivity.class));
-            finish();
-        }
-    };
+    private void completeLogin(AuthorizationInfo authorizationInfo){
+        requestRetrofitFactory.saveJsonToPref(authorizationInfo);
+        startActivity(new Intent(RedirectBindingActivity.this, MainActivity.class));
+        finish();
+    }
 
     @Override
     protected void onDestroy() {

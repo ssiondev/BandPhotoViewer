@@ -5,14 +5,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
-import com.bandphotoviewer.Model.BandAlbumModel;
+import com.bandphotoviewer.Model.Page;
+import com.bandphotoviewer.Model.PageableResponse;
+import com.bandphotoviewer.ViewModel.AbstractViewModel;
+import com.bandphotoviewer.Model.AlbumList;
 import com.bandphotoviewer.NetworkManager.RequestRetrofitFactory;
 import com.bandphotoviewer.R;
 import com.bandphotoviewer.Utils.Pref;
@@ -20,11 +20,9 @@ import com.bandphotoviewer.View.Adapter.RecyclerItemAdapter;
 import com.bandphotoviewer.ViewModel.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ActivityAlbumBinding;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by user on 2017. 12. 20..
@@ -39,10 +37,8 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
     private String bandKey;
     private String bandName;
 
-    private TextView tvAlbumListTitle;
-    private TextView tvBandName;
-
     private RecyclerItemAdapter recyclerItemAdapter;
+    private Page paging;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,40 +55,19 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
         bandName = intent.getStringExtra("name");
 
         requestRetrofitFactory.getCompositeDisposable().add(
-                requestRetrofitFactory.getAlbumList(bandKey)
-                        .subscribe(consumer));
-    }
+                requestRetrofitFactory.getAlbumList(bandKey, new HashMap<>())
+                        .subscribe(pageableResponse -> {
+                                    updateList(pageableResponse);
+                                }
+                                , throwable -> throwable.printStackTrace()));
 
-    Consumer<JsonObject> consumer = new Consumer<JsonObject>() {
-        @Override
-        public void accept(JsonObject jsonObject) throws Exception {
-            int result = jsonObject.get("result_code").getAsInt();
-            if (result == 1) {
-                JsonArray jsonArray = jsonObject.get("result_data").getAsJsonObject()
-                        .get("items").getAsJsonArray();
-
-                pref.putString(Pref.BAND_ALBUM_KEY + bandKey, jsonArray.toString());
-                initView();
-            }
-        }
-    };
-
-    public List<BandAlbumModel> convertToAlbumList() {
-        String json = pref.getString(Pref.BAND_ALBUM_KEY + bandKey, null);
-        Type listType = new TypeToken<ArrayList<BandAlbumModel>>() {
-        }.getType();
-        Gson gson = new Gson();
-        ArrayList<BandAlbumModel> list = gson.fromJson(json, listType);
-        return list;
+        initView();
     }
 
     public void initView() {
+        setToolbarTitle("Album.");
         albumListRecyclerView = getContentBinding().albumRecyclerview;
-        tvAlbumListTitle = getContentBinding().albumListTitle;
-        tvBandName = getContentBinding().bandName;
 
-        tvAlbumListTitle.setText(R.string.main_album_title);
-        tvBandName.setText(bandName);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 1);
         albumListRecyclerView.setHasFixedSize(true);
@@ -100,18 +75,29 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
 
         recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), albumListClickListener);
         albumListRecyclerView.setAdapter(recyclerItemAdapter);
-        recyclerItemAdapter.setAlbumItemList(convertToAlbumList());
     }
 
+    private void updateList(PageableResponse<List<AlbumList>> pageableResponse) {
+        if (pageableResponse != null) {
+            paging = pageableResponse.getResultData().getPage();
+        }
+
+        List<AbstractViewModel> viewModelList = new ArrayList<>();
+
+        Log.e("nextParam", paging.getNextParams() != null ? paging.getNextParams().toString() : "");
+
+        recyclerItemAdapter.setItemList(viewModelList);
+        recyclerItemAdapter.notifyDataSetChanged();
+    }
 
     RecyclerItemClickListener albumListClickListener = new RecyclerItemClickListener() {
         @Override
         public void onItemClick(Object object) {
-            if (object instanceof BandAlbumModel) {
+            if (object instanceof AlbumList) {
                 Intent intent = new Intent(AlbumListBindingActivity.this, PhotoBindingActivity.class);
                 intent.putExtra("band_key", bandKey);
-                intent.putExtra("album_key", ((BandAlbumModel) object).getPhoto_album_key());
-                intent.putExtra("album_name", ((BandAlbumModel) object).getName());
+                intent.putExtra("album_key", ((AlbumList) object).getPhotoAlbumKey());
+                intent.putExtra("album_name", ((AlbumList) object).getName());
                 overridePendingTransition(0, 0);
                 startActivity(intent);
             }

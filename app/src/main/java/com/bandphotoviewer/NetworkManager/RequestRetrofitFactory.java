@@ -1,8 +1,15 @@
 package com.bandphotoviewer.NetworkManager;
 
-import com.google.gson.JsonObject;
+import com.bandphotoviewer.Model.AlbumList;
+import com.bandphotoviewer.Model.BandList;
+import com.bandphotoviewer.Model.PhotoList;
+import com.bandphotoviewer.Model.BandResponse;
+import com.bandphotoviewer.Model.PageableResponse;
 import com.bandphotoviewer.Model.AuthorizationInfo;
 import com.bandphotoviewer.Utils.Pref;
+
+import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,8 +25,8 @@ public class RequestRetrofitFactory {
 
     private CompositeDisposable mCompositeDisposable = new CompositeDisposable();
 
-    private BandService tokenService = ApiFactory.getInstance().getRetrofitForAuthToken();
-    private BandService bandService = ApiFactory.getInstance().getRetrofitForBandService();
+    private BandService tokenService = RetrofitFactory.getInstance().getRetrofitForAuthToken();
+    private BandService bandService = RetrofitFactory.getInstance().getRetrofitForBandService();
 
     private Pref pref = Pref.getInstance();
 
@@ -29,34 +36,29 @@ public class RequestRetrofitFactory {
 
     public Single<AuthorizationInfo> requestForAuthToken(String received_authorization_code) {
         return tokenService.getAuthToken(received_authorization_code,
-                        ApiFactory.getInstance().getBase64Encode())
+                        RetrofitFactory.getInstance().getBase64Encode())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<JsonObject> getBandList() {
+    public Single<BandResponse<BandList>> getBandList() {
         return bandService.getBandList(getAccessTokenFromPref())
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Single<JsonObject> getAlbumList(String bandKey) {
-        return bandService.getBandAlbums(getAccessTokenFromPref(), bandKey)
+    public Single<PageableResponse<List<AlbumList>>> getAlbumList(String bandKey, Map<String, String> nextParam) {
+        return bandService.getBandAlbums(getAccessTokenFromPref(), bandKey, nextParam)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Single<JsonObject> getPhotoList(String bandKey, String albumKey) {
-        return bandService.getBandPhotos(getAccessTokenFromPref(), bandKey, albumKey)
+    public Single<PageableResponse<List<PhotoList>>> getPhotoList(String bandKey, String albumKey, Map<String, String> nextParam) {
+        return bandService.getBandPhotos(getAccessTokenFromPref(), bandKey, albumKey, nextParam)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread());
     }
-
-//
-//    public Flowable<PagableModel> getNextPages(String after){
-//        return bandService.getNextPage()
-//    }
 
     public void saveJsonToPref(Object modelObject) {
         if (modelObject != null) {

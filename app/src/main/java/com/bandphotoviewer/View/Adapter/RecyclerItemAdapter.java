@@ -7,33 +7,24 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.bandphotoviewer.BR;
-import com.bandphotoviewer.Model.BandAlbumModel;
-import com.bandphotoviewer.Model.BandListModel;
-import com.bandphotoviewer.Model.BandPhotoModel;
+import com.bandphotoviewer.Model.AlbumList;
+import com.bandphotoviewer.Model.BandModel;
+import com.bandphotoviewer.Model.PhotoList;
 import com.bandphotoviewer.Utils.Pref;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
-import com.bandphotoviewer.ViewModel.AlbumListViewModel;
-import com.bandphotoviewer.ViewModel.BandListViewModel;
 import com.bandphotoviewer.ViewModel.BindListViewType;
-import com.bandphotoviewer.ViewModel.PhotoListViewModel;
 import com.bandphotoviewer.ViewModel.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ItemAlbumcardviewBinding;
 import com.bandphotoviewer.databinding.ItemGridPhotoBinding;
 import com.bandphotoviewer.databinding.ItemMaincardviewBinding;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapter.BindingViewHolder> {
 
     private Context context;
     private RecyclerItemClickListener recyclerItemClickListener;
-    private Pref pref = Pref.getInstance();
 
     private List<AbstractViewModel> itemList = new ArrayList<>();
 
@@ -42,56 +33,20 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
-    public List<BandListModel> convertToBandList() {
-        String json = pref.getString(Pref.BAND_LIST_KEY, null);
-        Type listType = new TypeToken<ArrayList<BandListModel>>() {
-        }.getType();
-        Gson gson = new Gson();
-        ArrayList<BandListModel> list = gson.fromJson(json, listType);
-        return list;
-    }
-
-    public void setBandItemList(List<BandListModel> bandListModels) {
-        List<AbstractViewModel> itemList = new ArrayList<>();
-
-        for (BandListModel bandListModel : bandListModels) {
-            itemList.add(new BandListViewModel(bandListModel, recyclerItemClickListener));
-        }
-
-        this.itemList = itemList;
-        notifyDataSetChanged();
-    }
-
-    public void setAlbumItemList(List<BandAlbumModel> bandAlbumModels) {
-        List<AbstractViewModel> itemList = new ArrayList<>();
-
-        for (BandAlbumModel bandAlbumModel : bandAlbumModels) {
-            itemList.add(new AlbumListViewModel(bandAlbumModel, recyclerItemClickListener));
-        }
-        this.itemList = itemList;
-        Collections.reverse(itemList);
-        notifyDataSetChanged();
-    }
-
-    public void setPhotoItemList(List<BandPhotoModel> bandPhotoModels) {
-        List<AbstractViewModel> itemList = new ArrayList<>();
-
-        for (BandPhotoModel model : bandPhotoModels) {
-            itemList.add(new PhotoListViewModel(model, recyclerItemClickListener));
-        }
-        this.itemList = itemList;
-        notifyDataSetChanged();
+    public void setItemList(List<AbstractViewModel> viewModelList) {
+        this.itemList.clear();
+        this.itemList.addAll(viewModelList);
     }
 
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (BindListViewType.values()[viewType]) {
             case BANDLIST:
-                return new BindingViewHolder<ItemMaincardviewBinding, BandListModel>(ItemMaincardviewBinding.inflate(LayoutInflater.from(context)));
+                return new BindingViewHolder<ItemMaincardviewBinding, BandModel>(ItemMaincardviewBinding.inflate(LayoutInflater.from(context)));
             case ALBUMLIST:
-                return new BindingViewHolder<ItemAlbumcardviewBinding, BandAlbumModel>(ItemAlbumcardviewBinding.inflate(LayoutInflater.from(context)));
+                return new BindingViewHolder<ItemAlbumcardviewBinding, AlbumList>(ItemAlbumcardviewBinding.inflate(LayoutInflater.from(context)));
             case PHOTOLIST:
-                return new BindingViewHolder<ItemGridPhotoBinding, BandPhotoModel>(ItemGridPhotoBinding.inflate(LayoutInflater.from(context)));
+                return new BindingViewHolder<ItemGridPhotoBinding, PhotoList>(ItemGridPhotoBinding.inflate(LayoutInflater.from(context)));
             default:
                 return null;
         }

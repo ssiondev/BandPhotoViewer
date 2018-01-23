@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:bind="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -15,28 +15,15 @@
         android:background="#FAFAFA"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/main_title"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/band_list_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="80dp"
-            android:layout_marginStart="8dp"
-            android:textAppearance="@style/Font"
-            android:textColor="#757575"
-            android:textSize="100sp" />
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="15dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/band_list_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#FAFAFA"
-                app:layoutManager="GridLayoutManager" />
-        </ScrollView>
+            android:background="#FAFAFA"
+            app:layoutManager="GridLayoutManager" />
     </LinearLayout>
+
+
 </layout>
+
+

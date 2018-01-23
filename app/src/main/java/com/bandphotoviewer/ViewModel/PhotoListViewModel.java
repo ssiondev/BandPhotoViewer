@@ -4,7 +4,7 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bandphotoviewer.Model.BandPhotoModel;
+import com.bandphotoviewer.Model.PhotoList;
 
 /**
  * Created by user on 2017. 12. 20..
@@ -12,40 +12,42 @@ import com.bandphotoviewer.Model.BandPhotoModel;
 
 public class PhotoListViewModel extends AbstractViewModel {
 
-    private BandPhotoModel bandPhotoModel;
-
-    public PhotoListViewModel(BandPhotoModel bandPhotoModel, RecyclerItemClickListener recyclerItemClickListener) {
-        super(recyclerItemClickListener);
-        this.bandPhotoModel = bandPhotoModel;
-    }
+    private PhotoList photoList;
 
     @Override
     public BindListViewType getViewType() {
         return BindListViewType.PHOTOLIST;
     }
 
+    public PhotoListViewModel(PhotoList photoList, RecyclerItemClickListener recyclerItemClickListener) {
+        super(photoList, recyclerItemClickListener);
+        this.photoList = photoList;
+    }
+
+
+
     public void onItemClick() {
-        recyclerItemClickListener.onItemClick(bandPhotoModel);
+        recyclerItemClickListener.onItemClick(photoList);
     }
 
     public String getUrl() {
-        return bandPhotoModel.getUrl();
+        return photoList.getUrl();
     }
 
     public String getPhotoKey() {
-        return bandPhotoModel.getPhoto_key();
+        return photoList.getPhotoKey();
     }
 
     public int getHeight() {
-        return bandPhotoModel.getHeight();
+        return photoList.getHeight();
     }
 
     public int getWidth() {
-        return bandPhotoModel.getWidth();
+        return photoList.getWidth();
     }
 
     public long getCreated() {
-        return bandPhotoModel.getCreated_at();
+        return photoList.getCreated_at();
     }
 
     @BindingAdapter("bind:imageUrl")

@@ -17,10 +17,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by ssion.dev
  */
 
-public class ApiFactory {
-    private static ApiFactory instance = new ApiFactory();
+public class RetrofitFactory {
+    private static RetrofitFactory instance = new RetrofitFactory();
 
-    public static ApiFactory getInstance() {
+    public static RetrofitFactory getInstance() {
         return instance;
     }
 

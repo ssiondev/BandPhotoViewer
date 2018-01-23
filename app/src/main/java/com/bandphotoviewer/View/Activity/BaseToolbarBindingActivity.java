@@ -2,14 +2,20 @@ package com.bandphotoviewer.View.Activity;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ViewDataBinding;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.bandphotoviewer.R;
 import com.bandphotoviewer.databinding.ActivityBaseToolbarBinding;
+import com.elmargomez.typer.Font;
+import com.elmargomez.typer.Typer;
 
 /**
  * Created by user on 2018. 1. 20..
@@ -20,6 +26,7 @@ public abstract class BaseToolbarBindingActivity<T extends ViewDataBinding> exte
     private Toolbar toolbar;
     private FrameLayout contentLayout;
 
+    private CollapsingToolbarLayout collapsingToolbarLayout;
     public T contentBinding;
 
     @Override
@@ -28,7 +35,9 @@ public abstract class BaseToolbarBindingActivity<T extends ViewDataBinding> exte
 
         setActivityLayout(R.layout.activity_base_toolbar);
 
-        toolbar = getActivityBinding().baseToolbar;
+        toolbar = getActivityBinding().toolbar;
+        collapsingToolbarLayout = getActivityBinding().toolbarLayout;
+
         setSupportActionBar(toolbar);
 
         contentLayout = getActivityBinding().baseContentLayout;
@@ -44,18 +53,24 @@ public abstract class BaseToolbarBindingActivity<T extends ViewDataBinding> exte
     }
 
     public void setToolbarTitle(String title) {
-        getActivityBinding().toolbarTitleTextView.setText(title);
-        getActivityBinding().toolbarTitleTextView.setTextColor(getResources().getColor(R.color.colorSlider));
+        Typeface font = Typer.set(getApplicationContext()).getFont(Font.ROBOTO_MEDIUM);
+        collapsingToolbarLayout.setTitle(title);
+
+        collapsingToolbarLayout.setExpandedTitleTypeface(font);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedTextApperance);
+
+        collapsingToolbarLayout.setCollapsedTitleTypeface(font);
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedTextApperance);
     }
 
     public void setNavigationIconVisibility(String tag, int visibility) {
         if(visibility == View.VISIBLE) {
             if(tag.contains("PhotoDetailBindingActivity")){
-                getActivityBinding().baseToolbar.setNavigationIcon(R.drawable.ic_action_close);
+                getActivityBinding().toolbar.setNavigationIcon(R.drawable.ic_action_close);
             } else {
-                getActivityBinding().baseToolbar.setNavigationIcon(R.drawable.ic_action_back);
+                getActivityBinding().toolbar.setNavigationIcon(R.drawable.ic_action_back);
             }
-            getActivityBinding().baseToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            getActivityBinding().toolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     finish();
