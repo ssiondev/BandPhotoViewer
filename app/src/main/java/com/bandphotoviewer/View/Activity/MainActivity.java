@@ -53,7 +53,8 @@ public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(), 2);
         bandListRecyclerview.setLayoutManager(gridLayoutManager);
         bandListRecyclerview.setHasFixedSize(true);
-        bandListRecyclerview.addItemDecoration(new ItemDecoratorViews(2, 2, false));
+
+        bandListRecyclerview.addItemDecoration(new ItemDecoratorViews(2, 4, true));
         recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), bandListClickListener);
         bandListRecyclerview.setAdapter(recyclerItemAdapter);
     }

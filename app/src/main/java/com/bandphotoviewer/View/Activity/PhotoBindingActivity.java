@@ -59,19 +59,15 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
 
         pref.setContext(this);
         getIntentForCallRetrofit(getIntent());
-
-        disposable = retrofitHelper.getPhotoList(bandKey, albumKey, new HashMap<>())
-                .subscribe(listPageableResponse -> {
-                    updateList(listPageableResponse);
-                }, throwable -> throwable.printStackTrace());
-
-        initView();
     }
 
     public void getIntentForCallRetrofit(Intent intent) {
         bandKey = intent.getStringExtra("band_key");
         albumKey = intent.getStringExtra("album_key");
         albumName = intent.getStringExtra("album_name");
+
+        getPhotoList();
+        initView();
     }
 
 
@@ -112,14 +108,13 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
     public void initView() {
         setToolbarTitle("Photo");
         recyclerView = getContentBinding().photoRecyclerview;
-
-        gridLayoutManager = new GridLayoutManager(this, 3);
         recyclerView.setHasFixedSize(true);
+
+        gridLayoutManager = new GridLayoutManager(getApplicationContext(), 3);
         recyclerView.addOnScrollListener(getViewScrollListener(gridLayoutManager));
 
-        recyclerView.addItemDecoration(new ItemDecoratorViews(3, 2, false));
-
         recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), photoListClickListener);
+        recyclerView.addItemDecoration(new ItemDecoratorViews(3, 6, true));
         recyclerView.setAdapter(recyclerItemAdapter);
     }
 

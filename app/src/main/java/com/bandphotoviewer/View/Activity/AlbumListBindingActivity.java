@@ -65,11 +65,11 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
 
     public void initView() {
         setToolbarTitle("Album.");
-        setCollapsingLayoutImage(cover, View.VISIBLE);
         albumListRecyclerView = getContentBinding().albumRecyclerview;
 
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         albumListRecyclerView.setHasFixedSize(true);
+
         albumListRecyclerView.addOnScrollListener(getViewScrollListener(linearLayoutManager));
         recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), albumListClickListener);
         albumListRecyclerView.setAdapter(recyclerItemAdapter);

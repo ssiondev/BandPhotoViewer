@@ -7,16 +7,15 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.bandphotoviewer.BR;
-import com.bandphotoviewer.model.Album;
-import com.bandphotoviewer.model.Band;
-import com.bandphotoviewer.model.Page;
-import com.bandphotoviewer.model.Photo;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
 import com.bandphotoviewer.customview.BindListViewType;
 import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ItemAlbumcardviewBinding;
 import com.bandphotoviewer.databinding.ItemGridPhotoBinding;
 import com.bandphotoviewer.databinding.ItemMaincardviewBinding;
+import com.bandphotoviewer.model.Album;
+import com.bandphotoviewer.model.Band;
+import com.bandphotoviewer.model.Photo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -93,13 +92,6 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
             binding.setVariable(BR.viewModel, viewmodel);
             binding.executePendingBindings();
         }
-
-        public interface NextPageLoagdingListener {
-            void onLoadingFinish(Page page);
-
-            void onLoadingFail();
-        }
-
     }
 
 

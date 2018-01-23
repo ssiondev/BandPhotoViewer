@@ -65,13 +65,6 @@ public abstract class BaseToolbarBindingActivity<T extends ViewDataBinding> exte
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedTextApperance);
     }
 
-    public void setCollapsingLayoutImage(String url, int visibility){
-        imageView = getActivityBinding().toolbarCoverImage;
-        if(visibility == View.VISIBLE){
-            Glide.with(getApplicationContext()).load(url).into(imageView);
-        }
-    }
-
     public void setNavigationIconVisibility(String tag, int visibility) {
         if(visibility == View.VISIBLE) {
             if(tag.contains("PhotoDetailBindingActivity")){
