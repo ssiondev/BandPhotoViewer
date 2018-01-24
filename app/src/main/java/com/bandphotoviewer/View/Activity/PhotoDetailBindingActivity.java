@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toolbar;
 
 import com.bandphotoviewer.R;
 import com.bandphotoviewer.View.Adapter.ViewPagerAdapter;
@@ -28,13 +29,14 @@ import java.util.TimerTask;
  * Created by user on 2018. 1. 14..
  */
 
-public class PhotoDetailBindingActivity extends AppCompatActivity {
+public class PhotoDetailBindingActivity extends BaseBindingActivity<ActivityPhotoDetailBinding> {
     private static final String TAG = PhotoDetailBindingActivity.class.getSimpleName();
 
     private List<Photo> photoList = new ArrayList<>();
 
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
+    private Toolbar toolbar;
 
     private String bandKey;
     private String albumKey;
@@ -42,15 +44,14 @@ public class PhotoDetailBindingActivity extends AppCompatActivity {
     private Boolean isSlideShow;
     private int currentPosition;
 
-    private ActivityPhotoDetailBinding binding;
     private Page page;
-
     private PageScrollListener pageScrollListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_photo_detail);
+        setActivityLayout(R.layout.activity_photo_detail);
+
         getIntentData();
         initView();
     }
@@ -75,8 +76,7 @@ public class PhotoDetailBindingActivity extends AppCompatActivity {
     }
 
     public void initView() {
-        viewPager = binding.detailViewPager;
-
+        viewPager = getActivityBinding().detailViewPager;
         viewPagerAdapter = new ViewPagerAdapter(bandKey, albumKey);
         viewPagerAdapter.addItemList(convertPhotoToPhotoViewModel(photoList));
 

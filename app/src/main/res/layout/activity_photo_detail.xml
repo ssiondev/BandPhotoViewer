@@ -3,13 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="android.view.View" />
-        <variable name="viewModel" type="com.bandphotoviewer.ViewModel.PhotoItemViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.bandphotoviewer.ViewModel.PhotoItemViewModel" />
     </data>
 
-    <com.bandphotoviewer.View.Adapter.HackeyViewPager
-        android:id="@+id/detail_view_pager"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <com.bandphotoviewer.View.Adapter.HackeyViewPager
+            android:id="@+id/detail_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 </layout>

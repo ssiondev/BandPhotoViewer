@@ -25,7 +25,7 @@
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="0dp"
-                android:background="#757575" />
+                android:background="#41484E" />
 
             <LinearLayout
                 android:layout_width="match_parent"

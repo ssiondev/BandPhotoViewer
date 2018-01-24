@@ -2,7 +2,8 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#25B807</color>
 
+    <color name="toolbarColor">#25B807</color>
     <color name="colorSlider">#757575</color>
 </resources>

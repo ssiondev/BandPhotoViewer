@@ -26,12 +26,12 @@
     </style>
 
     <style name="ExpandedTextApperance" parent="@android:style/TextAppearance.Large">
-        <item name="android:textColor">#757575</item>
+        <item name="android:textColor">#41484E</item>
         <item name="android:textSize">80sp</item>
     </style>
 
     <style name="CollapsedTextApperance" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textColor">#757575</item>
+        <item name="android:textColor">#41484E</item>
         <item name="android:textSize">28sp</item>
     </style>
 
