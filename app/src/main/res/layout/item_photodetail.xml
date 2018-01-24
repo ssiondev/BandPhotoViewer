@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.bandphotoviewer.ViewModel.PhotoDetailViewModel" />
+            type="com.bandphotoviewer.ViewModel.PhotoItemViewModel" />
     </data>
 
         <com.github.chrisbanes.photoview.PhotoView

@@ -4,7 +4,6 @@ import android.databinding.BindingAdapter;
 import android.widget.TextView;
 
 import com.bandphotoviewer.customview.BindListViewType;
-import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.model.Album;
 
 import java.text.SimpleDateFormat;
@@ -16,20 +15,24 @@ import java.util.Date;
 
 public class AlbumListViewModel extends AbstractViewModel {
 
-    private Album album;
+    private final Album album;
+    private final Navigator navigator;
 
     @Override
     public BindListViewType getViewType() {
         return BindListViewType.ALBUMLIST;
     }
 
-    public AlbumListViewModel(Album album, RecyclerItemClickListener recyclerItemClickListener) {
-        super(album, recyclerItemClickListener);
+    public AlbumListViewModel(Album album, Navigator navigator) {
+        super(album);
         this.album = album;
+        this.navigator = navigator;
     }
 
     public void onItemClick() {
-        recyclerItemClickListener.onItemClick(album);
+        if(navigator !=  null){
+            navigator.onClickAlbum(album);
+        }
     }
 
     public String getAlbumKey() {
@@ -58,5 +61,9 @@ public class AlbumListViewModel extends AbstractViewModel {
         Date date = new Date(millisecond);
         SimpleDateFormat showDate = new SimpleDateFormat("yyyy년 MM월");
         textView.setText(showDate.format(date));
+    }
+
+    public interface Navigator {
+        void onClickAlbum(Album album);
     }
 }

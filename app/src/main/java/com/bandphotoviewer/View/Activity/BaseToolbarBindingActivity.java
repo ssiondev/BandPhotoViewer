@@ -25,7 +25,6 @@ import com.elmargomez.typer.Typer;
 public abstract class BaseToolbarBindingActivity<T extends ViewDataBinding> extends BaseBindingActivity<ActivityBaseToolbarBinding> {
 
     private Toolbar toolbar;
-    private ImageView imageView;
     private FrameLayout contentLayout;
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
@@ -72,12 +71,7 @@ public abstract class BaseToolbarBindingActivity<T extends ViewDataBinding> exte
             } else {
                 getActivityBinding().toolbar.setNavigationIcon(R.drawable.ic_action_back);
             }
-            getActivityBinding().toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });
+            getActivityBinding().toolbar.setNavigationOnClickListener(view -> finish());
         }
     }
 }

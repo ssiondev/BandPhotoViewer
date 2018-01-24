@@ -14,7 +14,7 @@ public class PageableResponse<T> {
     @SerializedName("result_data")
     T resultData;
 
-    public int getReslutCode() {
+    public int getResultCode() {
         return reslutCode;
     }
 

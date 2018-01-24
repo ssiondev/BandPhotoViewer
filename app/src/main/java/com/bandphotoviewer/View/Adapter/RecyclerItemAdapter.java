@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.bandphotoviewer.BR;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
 import com.bandphotoviewer.customview.BindListViewType;
-import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ItemAlbumcardviewBinding;
 import com.bandphotoviewer.databinding.ItemGridPhotoBinding;
 import com.bandphotoviewer.databinding.ItemMaincardviewBinding;
@@ -21,14 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapter.BindingViewHolder> {
+    private ArrayList<AbstractViewModel> itemList = new ArrayList<>();
     private Context context;
-    private RecyclerItemClickListener recyclerItemClickListener;
 
-    private List<AbstractViewModel> itemList = new ArrayList<>();
-
-    public RecyclerItemAdapter(Context context, RecyclerItemClickListener recyclerItemClickListener) {
+    public RecyclerItemAdapter(Context context) {
         this.context = context;
-        this.recyclerItemClickListener = recyclerItemClickListener;
     }
 
     public void setItemList(List<AbstractViewModel> viewModelList) {
@@ -61,7 +57,7 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
     @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(BindingViewHolder holder, int position) {
-        holder.bind(itemList.get(position));
+        holder.bind(itemList.get(position), position);
     }
 
     @Override
@@ -79,6 +75,10 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
         return itemList.size();
     }
 
+    public ArrayList<AbstractViewModel> getItemList() {
+        return itemList;
+    }
+
     public static class BindingViewHolder<T extends ViewDataBinding, VM> extends RecyclerView.ViewHolder {
         private T binding;
         public VM viewmodel;
@@ -88,11 +88,10 @@ public class RecyclerItemAdapter extends RecyclerView.Adapter<RecyclerItemAdapte
             this.binding = binding;
         }
 
-        public void bind(VM viewmodel) {
+        public void bind(VM viewmodel, int position) {
+            binding.setVariable(BR.position, position);
             binding.setVariable(BR.viewModel, viewmodel);
             binding.executePendingBindings();
         }
     }
-
-
 }

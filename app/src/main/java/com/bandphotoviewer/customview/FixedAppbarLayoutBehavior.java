@@ -8,7 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 /**
- * Created by user on 2018. 1. 23..
+ * Content layout의 Scroll 중단점 확인을 위해 Appbar Behavior 구현
  */
 
 public class FixedAppbarLayoutBehavior extends AppBarLayout.Behavior {

@@ -4,7 +4,7 @@
 
     <data>
         <import type="android.view.View" />
-        <variable name="viewModel" type="com.bandphotoviewer.ViewModel.PhotoDetailViewModel" />
+        <variable name="viewModel" type="com.bandphotoviewer.ViewModel.PhotoItemViewModel" />
     </data>
 
     <com.bandphotoviewer.View.Adapter.HackeyViewPager

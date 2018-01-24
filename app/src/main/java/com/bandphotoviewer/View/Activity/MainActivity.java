@@ -15,7 +15,6 @@ import com.bandphotoviewer.View.Adapter.ItemDecoratorViews;
 import com.bandphotoviewer.View.Adapter.RecyclerItemAdapter;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
 import com.bandphotoviewer.ViewModel.BandListViewModel;
-import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ import java.util.List;
 
 import io.reactivex.disposables.Disposable;
 
-public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding> {
+public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding> implements BandListViewModel.Navigator {
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private RecyclerView bandListRecyclerview;
@@ -55,7 +54,7 @@ public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding
         bandListRecyclerview.setHasFixedSize(true);
 
         bandListRecyclerview.addItemDecoration(new ItemDecoratorViews(2, 4, true));
-        recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), bandListClickListener);
+        recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext());
         bandListRecyclerview.setAdapter(recyclerItemAdapter);
     }
 
@@ -67,25 +66,24 @@ public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding
 
         List<AbstractViewModel> viewModelList = new ArrayList<>();
         for (Band band : bandResponse.getResultData().getBands()) {
-            viewModelList.add(new BandListViewModel(band, bandListClickListener));
+            viewModelList.add(new BandListViewModel(band, this));
         }
         recyclerItemAdapter.setItemList(viewModelList);
         recyclerItemAdapter.notifyDataSetChanged();
     }
 
-    RecyclerItemClickListener bandListClickListener = new RecyclerItemClickListener() {
-        @Override
-        public void onItemClick(Object object) {
-            if (object instanceof Band) {
-                Intent intent = new Intent(MainActivity.this, AlbumListBindingActivity.class);
-                intent.putExtra("band_key", ((Band) object).getBand_key());
-                intent.putExtra("name", ((Band) object).getName());
-                intent.putExtra("cover", ((Band) object).getCover());
-                startActivity(intent);
-            }
+    @Override
+    public void onClickBandList(Band band) {
+        goToAlbumActivity(band);
+    }
 
-        }
-    };
+    private void goToAlbumActivity(Band band) {
+        Intent intent = new Intent(MainActivity.this, AlbumListBindingActivity.class);
+        intent.putExtra("band_key", band.getBand_key());
+        intent.putExtra("name", band.getName());
+        intent.putExtra("cover", band.getCover());
+        startActivity(intent);
+    }
 
     @Override
     protected void onDestroy() {

@@ -4,7 +4,6 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bandphotoviewer.customview.BindListViewType;
-import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bumptech.glide.Glide;
 import com.bandphotoviewer.model.Photo;
 
@@ -12,24 +11,26 @@ import com.bandphotoviewer.model.Photo;
  * Created by user on 2017. 12. 20..
  */
 
-public class PhotoListViewModel extends AbstractViewModel {
+public class PhotoItemViewModel extends AbstractViewModel {
 
-    private Photo photo;
+    private final Photo photo;
+    private final Navigator navigator;
 
     @Override
     public BindListViewType getViewType() {
         return BindListViewType.PHOTOLIST;
     }
 
-    public PhotoListViewModel(Photo photo, RecyclerItemClickListener recyclerItemClickListener) {
-        super(photo, recyclerItemClickListener);
+    public PhotoItemViewModel(Photo photo, Navigator navigator) {
+        super(photo);
         this.photo = photo;
+        this.navigator = navigator;
     }
 
-
-
-    public void onItemClick() {
-        recyclerItemClickListener.onItemClick(photo);
+    public void onItemClick(int position) {
+        if(navigator != null) {
+            navigator.onClickPhoto(position);
+        }
     }
 
     public String getUrl() {
@@ -62,5 +63,8 @@ public class PhotoListViewModel extends AbstractViewModel {
         Glide.with(photoView.getContext()).load(url).into(photoView);
     }
 
+    public interface Navigator {
+        void onClickPhoto(int position);
+    }
 
 }

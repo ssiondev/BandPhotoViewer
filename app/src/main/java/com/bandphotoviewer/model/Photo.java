@@ -1,12 +1,17 @@
 package com.bandphotoviewer.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 /**
  * Created by user on 2017. 12. 20..
  */
 
-public class Photo {
+public class Photo implements Parcelable {
 
     @SerializedName("photo_key")
     private String photoKey;   //사진 식별자
@@ -22,6 +27,32 @@ public class Photo {
 
     @SerializedName("created_at")
     private long created_at;    //생성 일시
+
+
+    public Photo(Parcel in){
+        readInParcel(in);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    private void readInParcel(Parcel in){
+        photoKey = in.readString();
+        url = in.readString();
+        width = in.readInt();
+        height = in.readInt();
+        created_at = in.readLong();
+    }
+
+    public void writeToParcel(Parcel dest, int flag){
+        dest.writeString(photoKey);
+        dest.writeString(url);
+        dest.writeInt(width);
+        dest.writeInt(height);
+        dest.writeLong(created_at);
+    }
 
     public String getPhotoKey() {
         return photoKey;
@@ -62,4 +93,19 @@ public class Photo {
     public void setCreated_at(long created_at) {
         this.created_at = created_at;
     }
+
+    public static final Creator<Photo> CREATOR = new Creator<Photo>() {
+
+        @Override
+        public Photo createFromParcel(Parcel source) {
+            return new Photo(source);
+        }
+
+        @Override
+        public Photo[] newArray(int size) {
+            return new Photo[size];
+        }
+
+    };
 }
+

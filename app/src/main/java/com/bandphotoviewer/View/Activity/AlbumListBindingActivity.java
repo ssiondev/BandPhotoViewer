@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 
 import com.bandphotoviewer.R;
 import com.bandphotoviewer.View.Adapter.RecyclerItemAdapter;
 import com.bandphotoviewer.ViewModel.AbstractViewModel;
 import com.bandphotoviewer.ViewModel.AlbumListViewModel;
-import com.bandphotoviewer.customview.RecyclerItemClickListener;
 import com.bandphotoviewer.customview.RecyclerViewScrollListener;
 import com.bandphotoviewer.databinding.ActivityAlbumBinding;
 import com.bandphotoviewer.model.Album;
@@ -30,7 +28,7 @@ import java.util.List;
  * Created by user on 2017. 12. 20..
  */
 
-public class AlbumListBindingActivity extends BaseToolbarBindingActivity<ActivityAlbumBinding> {
+public class AlbumListBindingActivity extends BaseToolbarBindingActivity<ActivityAlbumBinding> implements AlbumListViewModel.Navigator {
     private static final String TAG = AlbumListBindingActivity.class.getSimpleName();
     private Pref pref = Pref.getInstance();
     private RetrofitHelper retrofitHelper = new RetrofitHelper();
@@ -51,13 +49,13 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
         setNavigationIconVisibility(TAG, View.VISIBLE);
 
         pref.setContext(this);
-        getIntentForCallRetrofit(getIntent());
+        getIntentForCallRetrofit();
     }
 
-    public void getIntentForCallRetrofit(Intent intent) {
-        bandKey = intent.getStringExtra("band_key");
-        bandName = intent.getStringExtra("name");
-        cover = intent.getStringExtra("cover");
+    public void getIntentForCallRetrofit() {
+        bandKey = getIntent().getStringExtra("band_key");
+        bandName = getIntent().getStringExtra("name");
+        cover = getIntent().getStringExtra("cover");
 
         getAlbumList();
         initView();
@@ -71,12 +69,12 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
         albumListRecyclerView.setHasFixedSize(true);
 
         albumListRecyclerView.addOnScrollListener(getViewScrollListener(linearLayoutManager));
-        recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext(), albumListClickListener);
+        recyclerItemAdapter = new RecyclerItemAdapter(getApplicationContext());
         albumListRecyclerView.setAdapter(recyclerItemAdapter);
     }
 
     private void getAlbumList() {
-        if(page != null && page.getNextParams() == null) {
+        if (page != null && page.getNextParams() == null) {
             return;
         }
 
@@ -97,10 +95,10 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
 
         List<AbstractViewModel> viewModelList = new ArrayList<>();
         for (Album album : bandResponse.getResultData().getItems()) {
-            viewModelList.add(new AlbumListViewModel(album, albumListClickListener));
+            viewModelList.add(new AlbumListViewModel(album, this));
         }
 
-        if(page == null) {
+        if (page == null) {
             recyclerItemAdapter.clearItemList();
         }
 
@@ -125,21 +123,20 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
         };
     }
 
-    RecyclerItemClickListener albumListClickListener = new RecyclerItemClickListener() {
-        @Override
-        public void onItemClick(Object object) {
-            if (object instanceof Album) {
-                Intent intent = new Intent(AlbumListBindingActivity.this, PhotoBindingActivity.class);
+    @Override
+    public void onClickAlbum(Album album) {
+        goToPhotoActivity(album);
+    }
 
-                intent.putExtra("band_key", bandKey);
-                intent.putExtra("album_key", ((Album) object).getPhotoAlbumKey());
-                intent.putExtra("album_name", ((Album) object).getName());
+    private void goToPhotoActivity(Album album){
+        Intent intent = new Intent(AlbumListBindingActivity.this, PhotoBindingActivity.class);
 
-                overridePendingTransition(0, 0);
-                startActivity(intent);
-            }
-        }
-    };
+        intent.putExtra("band_key", bandKey);
+        intent.putExtra("album_key", album.getPhotoAlbumKey());
+
+        overridePendingTransition(0, 0);
+        startActivity(intent);
+    }
 
     @Override
     protected void onDestroy() {

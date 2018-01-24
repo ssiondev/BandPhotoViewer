@@ -6,8 +6,11 @@
         <import type="android.view.View" />
 
         <variable
+            name="position"
+            type="int"/>
+        <variable
             name="viewModel"
-            type="com.bandphotoviewer.ViewModel.PhotoListViewModel" />
+            type="com.bandphotoviewer.ViewModel.PhotoItemViewModel" />
     </data>
 
     <RelativeLayout
@@ -19,7 +22,7 @@
             android:id="@+id/item_grid_photo"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:onClick="@{() -> viewModel.onItemClick()}"
+            android:onClick="@{() -> viewModel.onItemClick(position)}"
             android:scaleType="centerCrop"
             bind:imageUrl="@{viewModel.url}" />
 

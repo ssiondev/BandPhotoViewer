@@ -42,7 +42,8 @@
 
             <activity android:name=".View.Activity.PhotoBindingActivity"/>
 
-            <activity android:name=".View.Activity.PhotoDetailBindingActivity"/>
+            <activity android:name=".View.Activity.PhotoDetailBindingActivity"
+                android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
         </application>
 

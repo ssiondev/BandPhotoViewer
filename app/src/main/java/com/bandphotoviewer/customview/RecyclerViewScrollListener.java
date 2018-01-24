@@ -6,7 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 /**
- * Created by user on 2018. 1. 15..
+ * RecyclerView Item Scroll 시 사용되는 Listener
  */
 
 public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollListener {
@@ -17,9 +17,6 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
 
     RecyclerView.LayoutManager mLayoutManager;
 
-    public RecyclerViewScrollListener() {
-    }
-
     public RecyclerViewScrollListener(LinearLayoutManager layoutManager, int visibleThreshold) {
         this.mLayoutManager = layoutManager;
         this.visibleThreshold = visibleThreshold;
@@ -29,7 +26,6 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         this.mLayoutManager = layoutManager;
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
     }
-
 
     public int getLastVisibleItem(int[] lastVisibleItemPositions) {
         int maxSize = 0;
@@ -55,6 +51,7 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         int totalItemCount = view.getLayoutManager().getItemCount();
 
        if (layoutManager instanceof GridLayoutManager) {
+           //현재 화면에서 보여지는 아이템의 마지막 포지션
             lastVisibleItemPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
         } else if (layoutManager instanceof LinearLayoutManager) {
             lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
@@ -75,18 +72,6 @@ public abstract class RecyclerViewScrollListener extends RecyclerView.OnScrollLi
         if (!loading && (lastVisibleItemPosition + visibleThreshold) > totalItemCount) {
             onLoadMore(totalItemCount, view);
             loading = true;
-        }
-    }
-
-    public void resetState() {
-        this.previousTotalItemCount = 0;
-        this.loading = true;
-    }
-
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        this.mLayoutManager = layoutManager;
-        if (layoutManager instanceof GridLayoutManager) {
-            visibleThreshold = visibleThreshold * ((GridLayoutManager) layoutManager).getSpanCount();
         }
     }
 
