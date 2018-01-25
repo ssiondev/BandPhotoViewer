@@ -46,7 +46,7 @@ public class AlbumListBindingActivity extends BaseToolbarBindingActivity<Activit
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_album);
-        setNavigationIconVisibility(TAG, View.VISIBLE);
+        setNavigationIconVisibility(View.VISIBLE);
 
         pref.setContext(this);
         getIntentForCallRetrofit();

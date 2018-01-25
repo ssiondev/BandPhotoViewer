@@ -4,8 +4,8 @@ import android.databinding.BindingAdapter;
 import android.widget.ImageView;
 
 import com.bandphotoviewer.customview.BindListViewType;
-import com.bumptech.glide.Glide;
 import com.bandphotoviewer.model.Photo;
+import com.bumptech.glide.Glide;
 
 /**
  * Created by user on 2017. 12. 20..
@@ -27,11 +27,6 @@ public class PhotoItemViewModel extends AbstractViewModel {
         this.navigator = navigator;
     }
 
-    public void onItemClick(int position) {
-        if(navigator != null) {
-            navigator.onClickPhoto(position);
-        }
-    }
 
     public String getUrl() {
         return photo.getUrl();
@@ -53,14 +48,15 @@ public class PhotoItemViewModel extends AbstractViewModel {
         return photo.getCreated_at();
     }
 
+    public void onItemClick(int position) {
+        if (navigator != null) {
+            navigator.onClickPhoto(position);
+        }
+    }
+
     @BindingAdapter("bind:imageUrl")
     public static void setPhotoUrl(ImageView imageView, String imageUrl) {
         Glide.with(imageView.getContext()).load(imageUrl).into(imageView);
-    }
-
-    @BindingAdapter("bind:startSlideOption")
-    public static void startSlideOption(ImageView photoView, String url) {
-        Glide.with(photoView.getContext()).load(url).into(photoView);
     }
 
     public interface Navigator {

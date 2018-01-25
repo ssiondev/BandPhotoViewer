@@ -35,7 +35,6 @@ public class MainActivity extends BaseToolbarBindingActivity<ActivityMainBinding
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_main);
-        setNavigationIconVisibility(TAG, View.GONE);
 
         disposable = retrofitHelper
                 .getBandList()

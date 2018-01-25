@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BandPhotoViewer</string>
+    <string name="app_name">BandPhoto</string>
 
     <string name="main_toolbar_name">Band.</string>
     <string name="main_album_title">Album.</string>
@@ -9,11 +9,5 @@
 
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
-
-
-    <string name="menu_night_mode_system">Follow system</string>
-    <string name="menu_night_mode_day">Day (always)</string>
-    <string name="menu_night_mode_night">Night (always)</string>
-    <string name="menu_night_mode_auto">Auto</string>
 
 </resources>

@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 
 import com.bandphotoviewer.R;
 import com.bandphotoviewer.View.Adapter.ViewPagerAdapter;
@@ -36,13 +35,14 @@ public class PhotoDetailBindingActivity extends BaseBindingActivity<ActivityPhot
 
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
-    private Toolbar toolbar;
 
     private String bandKey;
     private String albumKey;
 
     private Boolean isSlideShow;
     private int currentPosition;
+
+    private Toolbar toolbar;
 
     private Page page;
     private PageScrollListener pageScrollListener;
@@ -51,15 +51,18 @@ public class PhotoDetailBindingActivity extends BaseBindingActivity<ActivityPhot
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setActivityLayout(R.layout.activity_photo_detail);
+        setToolbar();
 
         getIntentData();
         initView();
     }
 
-    @Override
-    protected void onPause() {
-        overridePendingTransition(0, 0);
-        super.onPause();
+    public void setToolbar() {
+        toolbar = getActivityBinding().toolbar;
+        setSupportActionBar(toolbar);
+
+        getActivityBinding().toolbar.setNavigationIcon(R.drawable.ic_action_close);
+        getActivityBinding().toolbar.setNavigationOnClickListener(view -> finish());
     }
 
     public void getIntentData() {
@@ -77,6 +80,7 @@ public class PhotoDetailBindingActivity extends BaseBindingActivity<ActivityPhot
 
     public void initView() {
         viewPager = getActivityBinding().detailViewPager;
+
         viewPagerAdapter = new ViewPagerAdapter(bandKey, albumKey);
         viewPagerAdapter.addItemList(convertPhotoToPhotoViewModel(photoList));
 
@@ -87,6 +91,12 @@ public class PhotoDetailBindingActivity extends BaseBindingActivity<ActivityPhot
         if (isSlideShow) {
             setAutoPager();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        overridePendingTransition(0, 0);
+        super.onPause();
     }
 
     private List<AbstractViewModel> convertPhotoToPhotoViewModel(List<Photo> originalPhotoList) {

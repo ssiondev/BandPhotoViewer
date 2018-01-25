@@ -51,8 +51,8 @@ public class PhotoBindingActivity extends BaseToolbarBindingActivity<ActivityPho
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentLayout(R.layout.activity_photo);
-        setNavigationIconVisibility(TAG, View.VISIBLE);
 
+        setNavigationIconVisibility(View.VISIBLE);
         pref.setContext(this);
         getIntentForCallRetrofit(getIntent());
     }
